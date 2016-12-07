@@ -6,24 +6,19 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,8 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Recipe.findAll", query = "SELECT r FROM Recipe r"),
     @NamedQuery(name = "Recipe.findByRecipeId", query = "SELECT r FROM Recipe r WHERE r.recipeId = :recipeId"),
-    @NamedQuery(name = "Recipe.findByName", query = "SELECT r FROM Recipe r WHERE r.name = :name"),
-    @NamedQuery(name = "Recipe.findByAuthor", query = "SELECT r FROM Recipe r WHERE r.author = :author")})
+    @NamedQuery(name = "Recipe.findByTitle", query = "SELECT r FROM Recipe r WHERE r.title = :title"),
+    @NamedQuery(name = "Recipe.findByAuthor", query = "SELECT r FROM Recipe r WHERE r.author = :author"),
+    @NamedQuery(name = "Recipe.findByIngredients", query = "SELECT r FROM Recipe r WHERE r.ingredients = :ingredients"),
+    @NamedQuery(name = "Recipe.findBySteps", query = "SELECT r FROM Recipe r WHERE r.steps = :steps")})
 public class Recipe implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,20 +43,20 @@ public class Recipe implements Serializable {
     @Column(name = "recipe_id")
     private Integer recipeId;
     @Size(max = 45)
-    @Column(name = "name")
-    private String name;
-    @Size(max = 100)
+    @Column(name = "title")
+    private String title;
+    @Size(max = 45)
     @Column(name = "author")
     private String author;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "description")
-    private String description;
-    @JoinColumn(name = "cateogy", referencedColumnName = "category_id")
+    @Size(max = 3000)
+    @Column(name = "ingredients")
+    private String ingredients;
+    @Size(max = 3000)
+    @Column(name = "steps")
+    private String steps;
+    @JoinColumn(name = "category", referencedColumnName = "category_id")
     @ManyToOne
-    private Category cateogy;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Collection<RecipeIngredient> recipeIngredientCollection;
+    private Category category;
 
     public Recipe() {
     }
@@ -76,12 +73,12 @@ public class Recipe implements Serializable {
         this.recipeId = recipeId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
@@ -92,29 +89,28 @@ public class Recipe implements Serializable {
         this.author = author;
     }
 
-    public String getDescription() {
-        return description;
+    public String getIngredients() {
+        return ingredients;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 
-    public Category getCateogy() {
-        return cateogy;
+    public String getSteps() {
+        return steps;
     }
 
-    public void setCateogy(Category cateogy) {
-        this.cateogy = cateogy;
+    public void setSteps(String steps) {
+        this.steps = steps;
     }
 
-    @XmlTransient
-    public Collection<RecipeIngredient> getRecipeIngredientCollection() {
-        return recipeIngredientCollection;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setRecipeIngredientCollection(Collection<RecipeIngredient> recipeIngredientCollection) {
-        this.recipeIngredientCollection = recipeIngredientCollection;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
