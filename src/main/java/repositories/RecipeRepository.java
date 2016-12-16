@@ -6,7 +6,9 @@
 package repositories;
 
 import entities.Recipe;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,4 +19,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer>{
     
+    @Query(value = "SELECT r FROM Recipe r WHERE r.author = ?1")
+    List<Recipe> findByAuthor(String author);
 }

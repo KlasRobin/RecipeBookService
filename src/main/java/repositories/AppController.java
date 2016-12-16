@@ -45,26 +45,34 @@ public class AppController {
         return recipeRepository.findAll();
     }
     
+    @RequestMapping(value = "/recipiesByAuthor/{author}", method = RequestMethod.GET)
+    public List<Recipe> getRecipiesByAuthor(@PathVariable String author) {
+        return recipeRepository.findByAuthor(author);
+    }
+    
     @RequestMapping(value = "/recipies", method = RequestMethod.POST)
-    public List<Recipe> saveRecipie(@RequestBody Recipe recipe){
+    public void saveRecipie(@RequestBody Recipe recipe){
         recipeRepository.save(recipe);
-        return recipeRepository.findAll();
     }
     
     @RequestMapping(value = "/recipies/{id}", method = RequestMethod.POST)
-    public List<Recipe> deleteRecipie(@PathVariable int id) {
+    public void deleteRecipie(@PathVariable int id) {
         recipeRepository.delete(id);
-        return recipeRepository.findAll();
+    }
+    
+    @RequestMapping(value = "/recipies/{id}", method = RequestMethod.GET)
+    public Recipe getRecipe(@PathVariable int id) {
+        return recipeRepository.findOne(id);
     }
     
     @RequestMapping(value = "/recipies/{id}", method = RequestMethod.PUT)
-    public List<Recipe> updateRecipie(@PathVariable int id, @RequestBody Recipe newRecipe) {
+    public Recipe updateRecipie(@PathVariable int id, @RequestBody Recipe newRecipe) {
         Recipe oldRecipe = recipeRepository.findOne(id);
         oldRecipe.setCategory(newRecipe.getCategory());
         oldRecipe.setIngredients(newRecipe.getIngredients());
         oldRecipe.setSteps(newRecipe.getSteps());
         oldRecipe.setTitle(newRecipe.getTitle());
         recipeRepository.save(oldRecipe);
-        return recipeRepository.findAll();
+        return recipeRepository.findOne(id);
     }   
 }
